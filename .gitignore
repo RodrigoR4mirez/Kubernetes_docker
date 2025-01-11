@@ -1,0 +1,15 @@
+# Ignorar archivos de log
+*.log
+
+# Ignorar archivos temporales
+*.tmp
+
+# Archivos específicos de macOS
+.DS_Store
+
+# Ignorar dependencias de Node.js
+node_modules/
+
+# Archivos de configuración privados
+.env
+
