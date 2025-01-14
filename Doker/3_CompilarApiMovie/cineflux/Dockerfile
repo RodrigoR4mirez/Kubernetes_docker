@@ -7,8 +7,6 @@ WORKDIR /app
 # Copiamos el archivo pom.xml y el código fuente al contenedor
 COPY pom.xml .
 COPY src ./src
-# Verificamos que el directorio /app esté vacío en el contenedor
-RUN ls /app
 # Ejecutamos Maven para compilar el proyecto y generar el JAR,
 # omitiendo las pruebas (-Dmaven.test.skip=true).
 RUN mvn clean package -Dmaven.test.skip=true
@@ -20,8 +18,9 @@ LABEL maintainer="rod@gmail.com"
 # Establecemos el directorio de trabajo en /workspace
 WORKDIR /workspace
 # Verificamos que el directorio /workspace esté vacío en el contenedor
-RUN ls /workspace
+RUN ls -la /workspace
 # Copiamos el archivo JAR desde el contenedor builder y lo renombramos como app.jar
 COPY --from=builder /app/target/cineflux*.jar app.jar
 # Configuramos el punto de entrada del contenedor para ejecutar el JAR con Java
-ENTRYPOINT exec java -jar /workspace/app.jar
+ENTRYPOINT ["java", "-jar", "/workspace/app.jar"]
+#ENTRYPOINT exec java -jar /workspace/app.jar
