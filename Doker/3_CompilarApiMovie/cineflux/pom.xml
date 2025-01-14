@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Define la versión del modelo POM que se está utilizando -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Sección del parent (padre), se utiliza para heredar configuraciones comunes en proyectos Spring Boot -->
+    <parent>
+        <!-- Identificador del grupo de dependencias de Spring Boot -->
+        <groupId>org.springframework.boot</groupId>
+        <!-- Identificador del artefacto principal de Spring Boot -->
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <!-- Versión de Spring Boot utilizada -->
+        <version>3.1.5</version>
+        <!-- Ruta relativa del POM del proyecto padre (deja vacío para usar el predeterminado) -->
+        <relativePath/>
+    </parent>
+
+    <!-- Coordenadas del proyecto (identificadores únicos) -->
+    <groupId>app.com.cineflux</groupId>
+    <artifactId>cineflux</artifactId>
+    <!-- Versión del proyecto -->
+    <version>1.0-SNAPSHOT</version>
+    <!-- Tipo de empaquetado del proyecto (por defecto, un archivo JAR) -->
+    <packaging>jar</packaging>
+
+    <!-- Nombre del proyecto -->
+    <name>cineflux</name>
+
+    <!-- Propiedades del proyecto -->
+    <properties>
+        <!-- Codificación de caracteres del código fuente -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Codificación de caracteres en los reportes generados -->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Versión de Java utilizada para el proyecto -->
+        <java.version>17</java.version>
+        <!-- Versión del controlador de MySQL -->
+        <mysql-driver.version>1.0.1</mysql-driver.version>
+    </properties>
+
+    <!-- Dependencias del proyecto -->
+    <dependencies>
+
+        <!-- Dependencia de WebFlux para soporte reactivo en Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!-- Dependencia para la integración con R2DBC (base de datos reactiva) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+        </dependency>
+
+        <!-- Controlador R2DBC para MySQL -->
+        <dependency>
+            <groupId>io.asyncer</groupId>
+            <artifactId>r2dbc-mysql</artifactId>
+            <version>${mysql-driver.version}</version>
+        </dependency>
+
+        <!-- Lombok para simplificar el código, especialmente para generar getters y setters automáticamente -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <!-- Se marca como opcional porque no es esencial en el entorno de ejecución -->
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Herramientas de desarrollo de Spring Boot (solo en tiempo de ejecución) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Dependencia para pruebas con Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Dependencia para pruebas de código reactivo con Reactor -->
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- Sección de construcción del proyecto -->
+    <build>
+        <!-- Meta objetivo que se ejecutará por defecto durante la fase de construcción -->
+<!--        <defaultGoal>clean package</defaultGoal>-->
+
+        <!-- Plugins utilizados durante la construcción -->
+        <plugins>
+            <!-- Plugin para la aplicación de reglas en el proceso de construcción de Maven -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <!-- Prohibir versiones duplicadas de dependencias en el POM -->
+                                <banDuplicatePomDependencyVersions/>
+                                <!-- Requiere una versión mínima de Maven -->
+                                <requireMavenVersion>
+                                    <version>3.6.3</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Plugin para la compilación del código fuente -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!-- Codificación del código fuente -->
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <!-- Versión de Java utilizada para compilar -->
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <!-- Opciones para el compilador -->
+                    <compilerArgument>-Xlint:all</compilerArgument>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin para Spring Boot en el proceso de construcción -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- Excluir Lombok del empaquetado final -->
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
