@@ -1,5 +1,10 @@
 # Docker Setup for MySQL and Cineflux Application
 
+Read my post in Medium: 
+```http request
+https://rodrigor4mirez.medium.com/construyendo-una-aplicación-reactiva-con-spring-webflux-r2dbc-mysql-y-docker-una-guía-práctica-7a77d3677343
+```
+
 This guide provides a step-by-step process to set up a MySQL database and a Cineflux application using Docker containers within a custom network.
 
 ## Steps
